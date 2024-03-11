@@ -58,6 +58,10 @@ def signup():
     name = data.get("name")
     email = data.get("email")
     password = data.get("password")
+    cur.execute('''SELECT * FROM users where email = %s''',(email,))
+    existing_user = cur.fetchone()
+    if existing_user:
+        return "User already exists"
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     cur.execute('''INSERT INTO users(id,name,email,password) VALUES(%s,%s,%s,%s)''',(id,name, email, hashed_password))
     conn.commit()
